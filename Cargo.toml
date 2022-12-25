@@ -1,0 +1,22 @@
+[package]
+name = "egui-kman-additions"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# egui = "0.19.0"
+egui = {git = "https://github.com/emilk/egui"}
+
+[dev-dependencies]
+# eframe = "0.19.0"
+eframe = {git = "https://github.com/emilk/egui"}
+
+[[example]]
+name = "single_line_complition"
+path = "examples/single_line_complition.rs"
+
+[[example]]
+name = "table"
+path = "examples/table.rs"
