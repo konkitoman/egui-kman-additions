@@ -74,7 +74,7 @@ impl<'a> SingleLineComplition<'a> {
                     }
                 }
 
-                ui.memory().open_popup(id);
+                ui.memory_mut(|memory| memory.open_popup(id));
                 if state.finded && !state.finded_exact {
                     egui::popup::popup_below_widget(ui, id, &res, |ui| {
                         let text_size = ui.text_style_height(&egui::TextStyle::Body);
@@ -133,10 +133,10 @@ impl<'a> SingleLineComplition<'a> {
 
 impl SingleLineComplitionState {
     pub fn load(ctx: &Context, id: Id) -> Option<Self> {
-        ctx.data().get_persisted(id)
+        ctx.data_mut(|state| state.get_persisted(id))
     }
 
     pub fn store(self, ctx: &Context, id: Id) {
-        ctx.data().insert_persisted(id, self)
+        ctx.data_mut(|state| state.insert_persisted(id, self))
     }
 }

@@ -118,7 +118,7 @@ impl<T> Table<T> {
 
         let mut state;
         {
-            let s = ui.memory().data.get_temp::<TableState>(id);
+            let s = ui.memory(|memory| memory.data.get_temp::<TableState>(id));
             if let Some(s) = s {
                 state = s
             } else {
@@ -252,7 +252,7 @@ impl<T> Table<T> {
 
                                     if r.clicked() {
                                         focused = true;
-                                        ui.memory().request_focus(id);
+                                        ui.memory_mut(|memory| memory.request_focus(id));
                                         if state.selected.is_some() && state.selected.unwrap() == i
                                         {
                                             state.selected = None;
@@ -278,7 +278,7 @@ impl<T> Table<T> {
         }
 
         if focused || r.has_focus() {
-            if ui.input().key_pressed(Key::ArrowUp) {
+            if ui.input(|state| state.key_pressed(Key::ArrowUp)) {
                 if let Some(selected) = &mut state.selected {
                     if *selected > 0 {
                         *selected -= 1;
@@ -288,7 +288,7 @@ impl<T> Table<T> {
                 }
             }
 
-            if ui.input().key_pressed(Key::ArrowDown) {
+            if ui.input(|state| state.key_pressed(Key::ArrowDown)) {
                 if let Some(selected) = &mut state.selected {
                     if *selected < values_len - 1 {
                         *selected += 1;
@@ -298,13 +298,13 @@ impl<T> Table<T> {
                 }
             }
 
-            if ui.input().key_pressed(Key::Home) {
+            if ui.input(|state| state.key_pressed(Key::Home)) {
                 if let Some(selected) = &mut state.selected {
                     *selected = 0;
                 }
             }
 
-            if ui.input().key_pressed(Key::End) {
+            if ui.input(|state| state.key_pressed(Key::End)) {
                 if let Some(selected) = &mut state.selected {
                     *selected = values_len - 1;
                 }
@@ -313,7 +313,7 @@ impl<T> Table<T> {
 
         let selected = state.selected.clone();
 
-        ui.memory().data.insert_temp(id, state);
+        ui.memory_mut(|memory| memory.data.insert_temp(id, state));
 
         TableResponse {
             selected,
