@@ -48,24 +48,32 @@ impl<'a> SingleLineComplition<'a> {
 
     pub fn show(self, ui: &mut egui::Ui) -> SingleLineComplitionOut {
         let id = ui.id();
-        let mut state = SingleLineComplitionState::load(ui.ctx(), id).unwrap_or_default();
+        let mut state =
+            SingleLineComplitionState::load(ui.ctx(), id).unwrap_or(SingleLineComplitionState {
+                buffer: self.default.clone(),
+                finded: false,
+                finded_exact: false,
+                complitions: Vec::new(),
+            });
 
         let mut value_selected = false;
 
         let res = ui
             .with_layout(egui::Layout::left_to_right(egui::Align::default()), |ui| {
                 let res = ui.text_edit_singleline(&mut state.buffer);
-                if state.buffer.is_empty() && !res.has_focus() {
-                    state.buffer = self.default;
-                }
                 if res.lost_focus() {
                     state.complitions = Vec::new();
                     state.finded = false;
                     state.finded_exact = false;
                     for complition in self.complitions {
-                        if let Some(_) = complition.trim().find(state.buffer.trim()) {
+                        if state.buffer.is_empty() {
                             state.finded = true;
                             state.complitions.push(complition.to_string())
+                        } else {
+                            if let Some(_) = complition.trim().find(state.buffer.trim()) {
+                                state.finded = true;
+                                state.complitions.push(complition.to_string())
+                            }
                         }
 
                         if complition.trim() == state.buffer.trim() {

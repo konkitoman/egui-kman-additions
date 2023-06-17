@@ -11,8 +11,8 @@ impl App for State {
                     ui.add(SingleLineComplition::new(
                         "testing",
                         &[
-                            "", "Test1", "Test2", "Test21", "qqq", "dd", "Test6", "Test 8",
-                            "Test10", "Test432", "testdsa", "mqq", "dds",
+                            "Test1", "Test2", "Test21", "qqq", "dd", "Test6", "Test 8", "Test10",
+                            "Test432", "testdsa", "mqq", "dds",
                         ],
                     ));
                 });
